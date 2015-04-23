@@ -15,7 +15,12 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
-
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.table.*;
+import java.util.*;
+import javax.swing.*;
 
 public class MainTable extends JFrame {
 
@@ -36,14 +41,14 @@ public class MainTable extends JFrame {
 	 */
 	public MainTable() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 562, 343);
+		setBounds(100, 100, 663, 518);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 38, 414, 212);
+		tabbedPane.setBounds(41, 73, 513, 311);
 		contentPane.add(tabbedPane);
 		
 		JPanel EmailsName = new JPanel();
@@ -75,16 +80,16 @@ public class MainTable extends JFrame {
 		EmailsName.add(btnDraft);
 		
 		table = new JTable();
-		table.setBounds(110, 0, 154, 184);
+		table.setBounds(110, 0, 270, 272);
 		EmailsName.add(table);
 		
 		textField = new JTextField();
-		textField.setBounds(21, 7, 403, 20);
+		textField.setBounds(43, 42, 403, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnSearch = new JButton("search");
-		btnSearch.setBounds(432, 11, 89, 23);
+		btnSearch.setBounds(465, 39, 89, 23);
 		contentPane.add(btnSearch);
 		
 		JButton btnCompose = new JButton("compose");
@@ -95,10 +100,26 @@ public class MainTable extends JFrame {
 		                                   	{
 		                                   		
 		                                   		SendMessage send = new SendMessage();
-		                                   		send.setVisible(true);
+		                                   		send.frame.setVisible(true);
 		                                    }
 		                                 });
-		btnCompose.setBounds(20, 270, 89, 23);
+		btnCompose.setBounds(22, 410, 89, 23);
 		contentPane.add(btnCompose);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 97, 21);
+		contentPane.add(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmAddAnEmail = new JMenuItem("Add an Email");
+		mntmAddAnEmail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//jTabbedPane.add("test",new JScrollPane());
+				tabbedPane.add("Email 2", EmailsName );
+			}
+		});
+		mnFile.add(mntmAddAnEmail);
 	}
 }
