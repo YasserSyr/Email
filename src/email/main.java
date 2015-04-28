@@ -5,9 +5,9 @@ public class main
 {
 	public static void main(String[] args)
 	{
-		Connection window = new Connection();
+		Connection conn = new Connection();
 		
-		window.SignInWindow();
+		conn.SignInWindow();
 		
 	}
 

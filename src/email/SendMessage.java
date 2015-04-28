@@ -2,6 +2,7 @@ package email;
 import java.awt.EventQueue;
 
 import javax.mail.Message;
+import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -13,39 +14,35 @@ import javax.swing.JTextPane;
 import javax.swing.JButton;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Properties;
 
 
 public class SendMessage  extends JFrame
 {
 
-	private JFrame frame;
+	public JFrame frame;
 	private JTextField to;
 	private JTextField subject;
-	JEditorPane messageArea;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SendMessage window = new SendMessage();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the application.
-	 */
-	public SendMessage() {
+	private JEditorPane messageArea;
+	private Message sendMessage;
+	private Session session;
+	Connection conn;
+	
+	public SendMessage(Session session)
+	{
+	    	   
+		initialize(session);
+	}
+	
+	private void initialize(final Session session) 
+	{
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,9 +76,14 @@ public class SendMessage  extends JFrame
 		                              {
 			                              public void actionPerformed(ActionEvent arg0) 
 			                              {
+			                            	 
 			                            	  try
 			                            	    {
-												   Transport.send(message());
+			                            		  setMessage(session);
+			                            		   
+			                            		   transport();
+			                            		  
+												   frame.dispose(); 
 											    } 
 			                            	catch(AddressException e) 
 			                            	    {
@@ -92,43 +94,45 @@ public class SendMessage  extends JFrame
 												   e.printStackTrace();
 											    }
 			                              }
-		                              });
+		                              }
+								 );
+		
 		frame.getContentPane().add(btnSend);
 		
-		 messageArea = new JEditorPane();
-		 messageArea.setBounds(6, 93, 438, 179);
+		messageArea = new JEditorPane();
+	    messageArea.setBounds(6, 93, 438, 179);
+	    
 		frame.getContentPane().add(messageArea);
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		
-	}
 	
-	
-	
-	public Message message() 
-			throws AddressException, javax.mail.MessagingException
+	public void setMessage(Session session) 
+			    throws AddressException, javax.mail.MessagingException
 	{
-	   
-		Connection conn = new Connection();
 		
-		Message message = new MimeMessage(conn.authentication());
-	       
-	         message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to.getText()));
+		sendMessage = new MimeMessage(session);
+		
+		sendMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to.getText()));
 
-	         // Set Subject: header field
-	         message.setSubject(subject.getText());
+		sendMessage.setSubject(subject.getText());
 
-	        
-			// Now set the actual message
-	         message.setText(messageArea.getText());
-
-	         // Send message
-	        
-     return message;
-	     
+		sendMessage.setText(messageArea.getText());
+		
 	}
+	
+	private Message getMessage() 
+	{
+		return sendMessage;
+	}
+	
+	private void transport() 
+			    throws AddressException, javax.mail.MessagingException
+	{
+		 Transport.send(getMessage());
+	}
+	
+	 
 }
+	
+	
+	
+

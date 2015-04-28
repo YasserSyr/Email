@@ -4,6 +4,11 @@ package email;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,49 +17,82 @@ import javax.swing.JLayeredPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JTable;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
+
+import javax.swing.border.CompoundBorder;
 
 public class MainTable extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
 	private JTextField textField;
-	
 	protected JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
+	public JTable table;
+    
 	
 	
-
-	/**
-	 * Create the frame.
-	 */
-	public MainTable() {
+	public MainTable(final String u, final String p) 
+	{
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 562, 343);
+		setBounds(100, 100, 799, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 38, 414, 212);
+		tabbedPane.setBounds(6, 38, 787, 277);
 		contentPane.add(tabbedPane);
 		
 		JPanel EmailsName = new JPanel();
 		tabbedPane.addTab("Current Email", null, EmailsName, null);
 		EmailsName.setLayout(null);
 		
+		
+		
 		JButton Inbox = new JButton("Inbox");
-		Inbox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		Inbox.addActionListener(new ActionListener() 
+		                            {
+			                             public void actionPerformed(ActionEvent arg0)
+			                             {
+			                            	 Connection conn = new Connection();
+			                     		    
+			                                            conn.setPropertiesPOP();
+			                                            conn.setSession(u,p);
+			                                            
+			                            	 DefaultTableModel model =(DefaultTableModel) table.getModel();
+			                            	 
+			                            	 FetchingEmail check = new FetchingEmail();
+			                            	 
+			                            	    try 
+			                            	      {
+													check.setStore(conn.getSession(),u,p);
+			                            	      }
+			                            	  catch(NoSuchProviderException e)
+			                            	      {
+													e.printStackTrace();
+			                            	      } 
+			                            	  catch(MessagingException e) 
+			                            	      {
+													e.printStackTrace();
+			                            	      }
+			                            	    
+			                            	    check.fetch(model);
+				                              
+			                             }
+		                             });
+		
 		Inbox.setBounds(10, 11, 89, 23);
 		EmailsName.add(Inbox);
 		
@@ -74,9 +112,49 @@ public class MainTable extends JFrame {
 		btnDraft.setBounds(10, 146, 89, 23);
 		EmailsName.add(btnDraft);
 		
+		
+		
+		JButton btnCompose = new JButton("Compose");
+		btnCompose.addActionListener(new ActionListener() 
+		 								 {
+			                                  public void actionPerformed(ActionEvent e) 
+			                                  {
+			                                	  Connection conn = new Connection();
+			                          		    
+			                                                 conn.setPropertiesSMTP();
+			                                                 conn.setSession(u,p);
+			                                	     
+			                                   	  SendMessage sendMessage = new SendMessage(conn.getSession());
+			                                  
+			                                   				  sendMessage.frame.setVisible(true);
+			                                   				
+			                                  }
+		 								 });
+		
+		btnCompose.setBounds(10, 181, 89, 29);
+		EmailsName.add(btnCompose);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(409, 6, 351, 219);
+		EmailsName.add(panel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(98, 6, 305, 219);
+		EmailsName.add(scrollPane);
+		
 		table = new JTable();
-		table.setBounds(110, 0, 154, 184);
-		EmailsName.add(table);
+		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				""
+			}
+		));
+		
+		table.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new LineBorder(new Color(0, 0, 0))));
 		
 		textField = new JTextField();
 		textField.setBounds(21, 7, 403, 20);
@@ -87,18 +165,6 @@ public class MainTable extends JFrame {
 		btnSearch.setBounds(432, 11, 89, 23);
 		contentPane.add(btnSearch);
 		
-		JButton btnCompose = new JButton("compose");
 		
-		btnCompose.addActionListener(new ActionListener() 
-		                                 {
-		                                   	public void actionPerformed(ActionEvent arg0) 
-		                                   	{
-		                                   		
-		                                   		SendMessage send = new SendMessage();
-		                                   		send.setVisible(true);
-		                                    }
-		                                 });
-		btnCompose.setBounds(20, 270, 89, 23);
-		contentPane.add(btnCompose);
 	}
 }
