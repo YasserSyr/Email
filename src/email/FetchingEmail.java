@@ -13,6 +13,7 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FetchingEmail 
@@ -69,6 +70,8 @@ public class FetchingEmail
       catch(Exception mex) 
         {
     	  mex.printStackTrace();
+    	  JOptionPane.showMessageDialog( null ,"check the address", "error", JOptionPane.ERROR_MESSAGE);
+    	  return;
         }
 	}
 	

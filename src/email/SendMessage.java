@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
-
+import javax.swing.JOptionPane;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
-
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 
@@ -87,11 +87,15 @@ public class SendMessage  extends JFrame
 											    } 
 			                            	catch(AddressException e) 
 			                            	    {
-												   e.printStackTrace();
-											    }
+												  // e.printStackTrace();
+												   JOptionPane.showMessageDialog( null ,"check the address", "error", JOptionPane.ERROR_MESSAGE);
+												 //  return;
+			                            	    }
 			                                catch(javax.mail.MessagingException e) 
 			                            	    {
-												   e.printStackTrace();
+												// e.printStackTrace();
+												   JOptionPane.showMessageDialog(null  ,"check the address", "error", JOptionPane.ERROR_MESSAGE);
+												   //return;
 											    }
 			                              }
 		                              }
@@ -106,16 +110,22 @@ public class SendMessage  extends JFrame
 	}
 	
 	public void setMessage(Session session) 
-			    throws AddressException, javax.mail.MessagingException
+			  
 	{
 		
 		sendMessage = new MimeMessage(session);
 		
-		sendMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to.getText()));
+		try {
+			sendMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to.getText()));
+			sendMessage.setSubject(subject.getText());
 
-		sendMessage.setSubject(subject.getText());
+			sendMessage.setText(messageArea.getText());
+		} catch (javax.mail.MessagingException e) {
+			 JOptionPane.showMessageDialog(null  ,"check the address", "error", JOptionPane.ERROR_MESSAGE);
+			//e.printStackTrace();
+		}
 
-		sendMessage.setText(messageArea.getText());
+		
 		
 	}
 	

@@ -12,6 +12,7 @@ import javax.mail.internet.AddressException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JLayeredPane;
 import javax.swing.BoxLayout;
@@ -81,11 +82,13 @@ public class MainTable extends JFrame {
 			                            	      }
 			                            	  catch(NoSuchProviderException e)
 			                            	      {
-													e.printStackTrace();
+													//e.printStackTrace();
+													JOptionPane.showMessageDialog( null ,"no such Provider", "error", JOptionPane.ERROR_MESSAGE);
 			                            	      } 
 			                            	  catch(MessagingException e) 
 			                            	      {
-													e.printStackTrace();
+													//e.printStackTrace();
+													JOptionPane.showMessageDialog( null ,"check the message", "error", JOptionPane.ERROR_MESSAGE);
 			                            	      }
 			                            	    
 			                            	    check.fetch(model);

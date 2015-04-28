@@ -2,12 +2,12 @@
 package email;
 
 import java.awt.EventQueue;
+
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -56,6 +56,8 @@ public class Connection
                                         catch(Exception e) 
                                              {
                                                e.printStackTrace();
+                                               JOptionPane.showMessageDialog( null, "an error occur in display", "error", JOptionPane.ERROR_MESSAGE);
+											   return;
                                              }
                                         }
                                     });
@@ -80,13 +82,17 @@ public class Connection
 		passField.setColumns(10);
 		
 		
+		
 		btnSignIn = new JButton("Sign In");
 		            btnSignIn.addActionListener(new ActionListener() 
                     {
                         public void actionPerformed(ActionEvent arg0)
                        {
+                        	String user = "";
+                        	String Pass = "";
          	                 frame.dispose();
          	                 
+         	                
          	                //setPass(passField.getText().trim());
                             //setUser(userField.getText().trim());
          	                
