@@ -27,12 +27,10 @@ public class Connection
 
 	private Properties properties;
 	private Session session;
-    private String user;
-    private String pass;
-    
+   
 	private JFrame frame;
-    public JTextField userField;
-    public JTextField passField;
+    private JTextField userField;
+    private JTextField passField;
     private JButton btnSignIn;
 	
 	
@@ -42,8 +40,6 @@ public class Connection
 		initialize();
 	}
 	
-	
-
 	public void SignInWindow()
 	{
 		EventQueue.invokeLater(new Runnable() 
@@ -55,9 +51,7 @@ public class Connection
                                              } 
                                         catch(Exception e) 
                                              {
-                                               e.printStackTrace();
                                                JOptionPane.showMessageDialog( null, "an error occur in display", "error", JOptionPane.ERROR_MESSAGE);
-											   return;
                                              }
                                         }
                                     });
@@ -88,14 +82,9 @@ public class Connection
                     {
                         public void actionPerformed(ActionEvent arg0)
                        {
-                        	String user = "";
-                        	String Pass = "";
+                        	
          	                 frame.dispose();
-         	                 
-         	                
-         	                //setPass(passField.getText().trim());
-                            //setUser(userField.getText().trim());
-         	                
+         	               
          	                MainTable mainTable =new MainTable(userField.getText().trim(),passField.getText().trim());
          	                          mainTable.setVisible(true);
          	               

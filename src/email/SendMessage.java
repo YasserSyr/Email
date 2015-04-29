@@ -32,7 +32,6 @@ public class SendMessage  extends JFrame
 	private JEditorPane messageArea;
 	private Message sendMessage;
 	private Session session;
-	Connection conn;
 	
 	public SendMessage(Session session)
 	{

@@ -1,10 +1,14 @@
 package email;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
+import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -20,6 +24,7 @@ public class FetchingEmail
 {
 	 
 	private Store store;
+	
 	
 	public void setStore(Session session,final String u, final String p) 
 			      throws NoSuchProviderException, MessagingException
@@ -41,40 +46,57 @@ public class FetchingEmail
           {
             
               Folder inbox = getStore().getFolder("INBOX");
-                     inbox.open(Folder.READ_ONLY);
-   
+                     inbox.open(Folder.READ_WRITE);
+                 
+                 int  count =0;
              for(int i=inbox.getMessageCount(); i > 0 ;i--)
                 {
                     Message msg = inbox.getMessage(i);
-   
+                    
                     Address[] in = msg.getFrom();
      
                     for(Address address : in) 
                       {
-                    	//System.err.println("=======================");
-                    	//System.out.println("FROM:" + address.toString());
-          
-                    	Multipart mp = (Multipart) msg.getContent();
-   
-                    	BodyPart bp = mp.getBodyPart(0);
-                    	//System.out.println("SENT DATE:" + msg.getSentDate());
-                    	//System.out.println("SUBJECT:" + msg.getSubject());
-                    	//System.out.println("CONTENT:" + bp.getContent());
-                    	
-                    	
-                    	model.addRow(new Object [] {address.toString()});
+                    	model.addRow(new Object [] {i,msg.getSentDate(),address.toString(),msg.getSubject()});
                       }
+                   
                 }
    
           } 
       catch(Exception mex) 
         {
-    	  mex.printStackTrace();
-    	  JOptionPane.showMessageDialog( null ,"check the address", "error", JOptionPane.ERROR_MESSAGE);
-    	  return;
+    	  JOptionPane.showMessageDialog( null ,"inbox empty", "error", JOptionPane.ERROR_MESSAGE);
         }
 	}
 	
-	
+    public void deleteMessage(Object ar)
+    {
+    	
+    	Folder inbox;
+		try 
+		  {
+			
+			   inbox = getStore().getFolder("INBOX");
+			   inbox.open(Folder.READ_WRITE);
+		        
+	            int r =  Integer.parseInt( ar.toString());
+	          
+	            System.out.println(r);
+	          
+	             Message message = inbox.getMessage(r);
+	       
+	             message.setFlag(Flags.Flag.DELETED, true);
+		    } 
+		catch(MessagingException e) 
+		    {
+			   JOptionPane.showMessageDialog( null ,"Not Deleted", "error", JOptionPane.ERROR_MESSAGE);
+		    }
+       
+       }  
+    
 
 }
+	
+
+
+
